@@ -7,16 +7,20 @@ namespace Kraken.Client.DataTypes
     public class AssetPairTicker
     {
         /// <summary>
-        /// The asset pair of the ticker information
+        /// The asset pair for the ticker information
         /// </summary>
         public AssetPair AssetPair { get; set; }
         /// <summary>
-        /// The current ask price for base currency of the asset pair
+        /// The current ask price given in the quote currency of the asset pair
         /// </summary>
         public decimal AskPrice { get; set; }
         /// <summary>
-        /// The current bid price for the base currency of the asset pair
+        /// The current bid price given in the quote currency of the asset pair
         /// </summary>
         public decimal BidPrice { get; set; }
+        /// <summary>
+        /// The last price given in the quote currency of the asset pair
+        /// </summary>
+        public decimal LastPrice { get; set; }
     }
 }

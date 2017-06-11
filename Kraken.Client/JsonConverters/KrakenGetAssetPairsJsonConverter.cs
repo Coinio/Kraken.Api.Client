@@ -11,11 +11,11 @@ namespace Kraken.Client.JsonConverters
 {
     public class KrakenGetAssetPairsJsonConverter : JsonConverter
     {
-        private readonly Dictionary<String, Asset> _assets;
+        private readonly Dictionary<String, Asset> _assetCache;
 
-        public KrakenGetAssetPairsJsonConverter(Dictionary<String, Asset> assets)
+        public KrakenGetAssetPairsJsonConverter(Dictionary<String, Asset> assetCache)
         {
-            _assets = assets ?? throw new ArgumentNullException("assets");
+            _assetCache = assetCache ?? throw new ArgumentNullException("assetCache");
         }
 
         public override bool CanWrite => false;
@@ -44,16 +44,19 @@ namespace Kraken.Client.JsonConverters
             {
                 if (!assetPairToken.HasValues)
                     continue;
+                
+                var parent = assetPairToken.Parent as JProperty;
 
-                var altname = assetPairToken["altname"]?.ToString();
+                var altname = parent?.Name;
                 var baseName = assetPairToken["base"]?.ToString();
                 var quoteName = assetPairToken["quote"]?.ToString();
 
                 var assetPair = new AssetPair()
                 {
                     Name = altname,
-                    BaseCurrency = _assets[baseName],
-                    QuoteCurrency = _assets[quoteName]
+                    // TODO: Make a deep copy of these, not just a reference
+                    BaseCurrency = _assetCache[baseName],
+                    QuoteCurrency = _assetCache[quoteName]
                 };
                 
                 assetPairs.Add(assetPair);
