@@ -4,19 +4,19 @@ using System.Text;
 
 namespace Kraken.Client.DataTypes
 {
-    public class AssetPair
+    public class KrakenAssetPair
     {
         /// <summary>
         /// The name of the asset pair
         /// </summary>
-        public String Name { get; set; }
+        public String PairName { get; set; }
         /// <summary>
-        /// The base currency for an asset pair
+        /// The name of the base currency for the asset pair
         /// </summary>
-        public Asset BaseCurrency { get; set; }
+        public String BaseName { get; set; }
         /// <summary>
-        /// The quote currency for an asset pair
+        /// The name of the quote currency for the asset pair
         /// </summary>
-        public Asset QuoteCurrency { get; set; }
+        public String QuoteName { get; set; }
     }
 }

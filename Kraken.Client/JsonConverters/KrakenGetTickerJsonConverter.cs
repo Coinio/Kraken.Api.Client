@@ -11,18 +11,11 @@ namespace Kraken.Client.JsonConverters
 {
     public class KrakenGetTickerJsonConverter : JsonConverter
     {
-        private readonly AssetPair[] _assetPairs;
-
-        public KrakenGetTickerJsonConverter(AssetPair[] assetPairs)
-        {
-            _assetPairs = assetPairs ?? throw new ArgumentNullException("assetPairCache");
-        }
-
         public override bool CanWrite => false;
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(AssetPairTicker[]))
+            if (objectType == typeof(KrakenAssetPairTicker[]))
                 return true;
 
             return false;
@@ -38,7 +31,7 @@ namespace Kraken.Client.JsonConverters
             if (errorJson.HasValues)
                 throw new HttpRequestException(errorJson.ToString());
 
-            var assetPairTickers = new List<AssetPairTicker>();
+            var assetPairTickers = new List<KrakenAssetPairTicker>();
 
             foreach (var tickerToken in resultJson.Children().Values())
             {
@@ -47,10 +40,9 @@ namespace Kraken.Client.JsonConverters
 
                 var parent = tickerToken.Parent as JProperty;
 
-                var ticker = new AssetPairTicker()
+                var ticker = new KrakenAssetPairTicker()
                 {
-                    // TODO: Make a deep copy of these, not just a reference.
-                    AssetPair = _assetPairs.FirstOrDefault(pair => pair.Name == parent.Name),
+                    PairName = parent.Name,
                     AskPrice = GetPriceFromToken(tickerToken["a"]),
                     BidPrice = GetPriceFromToken(tickerToken["b"]),
                     LastPrice = GetPriceFromToken(tickerToken["c"])

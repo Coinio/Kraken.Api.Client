@@ -13,7 +13,7 @@ namespace Kraken.Client.JsonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(Asset[]))
+            if (objectType == typeof(KrakenAsset[]))
                 return true;
 
             return false;
@@ -34,7 +34,7 @@ namespace Kraken.Client.JsonConverters
             if (errorJson.HasValues)
                 throw new HttpRequestException(errorJson.ToString());
 
-            var assets = new List<Asset>();
+            var assets = new List<KrakenAsset>();
 
             if (!resultJson.HasValues)
                 return assets;
@@ -46,7 +46,7 @@ namespace Kraken.Client.JsonConverters
 
                 var parent = assetToken.Parent as JProperty;
 
-                var asset = new Asset()
+                var asset = new KrakenAsset()
                 {
                     AssetName = parent.Name,
                     Class = GetAssetClassFromToken(assetToken),

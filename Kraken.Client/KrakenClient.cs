@@ -24,37 +24,43 @@ namespace Kraken.Client
             _httpClient.BaseAddress = new Uri("https://api.kraken.com");          
         }
 
-        public async Task<Asset[]> GetAssetInfo()
+        public async Task<KrakenAsset[]> GetAssetInfo()
         {
             var url = $"{_krakenBaseAddress}/{_krakenApiVersion}/public/Assets";
 
             var response = await _httpClient.GetStringAsync(url);
 
-            var assets = JsonConvert.DeserializeObject<Asset[]>(response, new KrakenGetAssetsJsonConverter());
+            var assets = JsonConvert.DeserializeObject<KrakenAsset[]>(response, new KrakenGetAssetsJsonConverter());
 
             return assets;
         }
 
-        public async Task<AssetPair[]> GetAssetPairs(Dictionary<String, Asset> assetCache)
+        public async Task<KrakenAssetPair[]> GetAssetPairs()
         {
             var url = $"{_krakenBaseAddress}/{_krakenApiVersion}/public/AssetPairs";
 
             var response = await _httpClient.GetStringAsync(url);
 
-            var assetPairs = JsonConvert.DeserializeObject<AssetPair[]>(response, new KrakenGetAssetPairsJsonConverter(assetCache));
+            var assetPairs = JsonConvert.DeserializeObject<KrakenAssetPair[]>(response, new KrakenGetAssetPairsJsonConverter());
 
             return assetPairs;
         }          
 
-        public async Task<AssetPairTicker[]> GetAssetPairTickers(AssetPair[] assetPairs)
+        public async Task<KrakenAssetPairTicker[]> GetAssetPairTickers(KrakenAssetPair[] assetPairs)
         {
-            var parameters = BuildParametersFromArray("pair", assetPairs.Select(pair => pair.Name).ToArray());
+            var pairNames = assetPairs.Select(p => p.PairName).ToArray();
+
+            return await GetAssetPairTickers(pairNames);
+        }
+
+        public async Task<KrakenAssetPairTicker[]> GetAssetPairTickers(String[] pairNames)
+        {
+            var parameters = BuildParametersFromArray("pair", pairNames);
 
             var url = $"{_krakenBaseAddress}/{_krakenApiVersion}/public/Ticker?{parameters}";
-
             var response = await _httpClient.GetStringAsync(url);
 
-            var tickers = JsonConvert.DeserializeObject<AssetPairTicker[]>(response, new KrakenGetTickerJsonConverter(assetPairs));
+            var tickers = JsonConvert.DeserializeObject<KrakenAssetPairTicker[]>(response, new KrakenGetTickerJsonConverter());
 
             return tickers;
         }

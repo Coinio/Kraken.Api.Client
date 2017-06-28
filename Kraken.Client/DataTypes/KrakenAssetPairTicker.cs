@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Kraken.Client.DataTypes
 {
-    public class AssetPairTicker
+    public class KrakenAssetPairTicker
     {
         /// <summary>
-        /// The asset pair for the ticker information
+        /// The asset pair name for the ticker information
         /// </summary>
-        public AssetPair AssetPair { get; set; }
+        public String PairName { get; set; }
         /// <summary>
         /// The current ask price given in the quote currency of the asset pair
         /// </summary>

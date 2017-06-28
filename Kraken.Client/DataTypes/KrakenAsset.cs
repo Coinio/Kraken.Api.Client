@@ -12,10 +12,10 @@ namespace Kraken.Client.DataTypes
     /// <summary>
     /// A class to hold the details of an asset
     /// </summary>
-    public class Asset
+    public class KrakenAsset
     {     
         /// <summary>
-        /// Change to a strongly typed enumerable
+        /// The asset class (only Currency for now)
         /// </summary>
         public AssetClass Class { get; set; }
         /// <summary>
