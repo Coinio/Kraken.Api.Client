@@ -10,7 +10,7 @@ namespace Client.Test
     {
         static void Main(string[] args)
         {
-            var client = new KrakenClient();
+            var client = new KrakenClient("https://api.kraken.com");
 
             var assets = client.GetAssetInfo().Result;
 

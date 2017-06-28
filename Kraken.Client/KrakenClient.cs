@@ -15,13 +15,13 @@ namespace Kraken.Client
     {
         private HttpClient _httpClient;
 
-        private String _krakenBaseAddress = "https://api.kraken.com";
+        private String _krakenBaseAddress;
         private String _krakenApiVersion = "0";
 
-        public KrakenClient()
+        public KrakenClient(String baseAddress)
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://api.kraken.com");          
+            _httpClient.BaseAddress = new Uri(baseAddress);          
         }
 
         public async Task<KrakenAsset[]> GetAssetInfo()
