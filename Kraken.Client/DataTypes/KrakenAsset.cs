@@ -10,7 +10,7 @@ namespace Kraken.Client.DataTypes
     }
 
     /// <summary>
-    /// A class to hold the details of an asset
+    /// The parsed result of the 'https://api.kraken.com/0/public/Assets' end point
     /// </summary>
     public class KrakenAsset
     {     

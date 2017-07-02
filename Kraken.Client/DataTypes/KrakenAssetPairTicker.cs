@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Kraken.Client.DataTypes
 {
+    /// <summary>
+    /// The parsed result of the 'https://api.kraken.com/0/public/Ticker' end point
+    /// </summary>
     public class KrakenAssetPairTicker
     {
         /// <summary>
