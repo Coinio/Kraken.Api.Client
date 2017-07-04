@@ -3,13 +3,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 
 namespace Kraken.Client.JsonConverters
 {
-    public class KrakenGetTickerJsonConverter : JsonConverter
+    /// <summary>
+    /// Convert the Json response from the 'https://api.kraken.com/0/public/Ticker' end point
+    /// </summary>
+    internal class KrakenGetTickerJsonConverter : JsonConverter
     {
         public override bool CanWrite => false;
 

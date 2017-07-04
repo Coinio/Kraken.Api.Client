@@ -7,7 +7,10 @@ using System.Net.Http;
 
 namespace Kraken.Client.JsonConverters
 {
-    public class KrakenGetAssetsJsonConverter : JsonConverter
+    /// <summary>
+    /// Convert the Json response from the 'https://api.kraken.com/0/public/Assets' end point
+    /// </summary>
+    internal class KrakenGetAssetsJsonConverter : JsonConverter
     {
         public override bool CanWrite => false;
 
