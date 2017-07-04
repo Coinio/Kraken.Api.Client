@@ -42,7 +42,7 @@ Request a list of asset pair tickers. This can be limited to a subset of asset p
 Request the OHLC (Open / High / Low / Closed) data. The interval for the data can specified and the 'since' parameter can be given as the lastPollingId (https://api.kraken.com/0/public/OHLC):
 
 ```cs
-  var ohlcData = await client.GetOHLC("XETHZUSD", OHLCTimeInterval.FiveMinutes, lastPollingId);
+  var ohlcData = await client.GetOHLC(assetPair.PairName, OHLCTimeInterval.FiveMinutes, lastPollingId);
 
   Console.WriteLine($"{ohlcData.PairName} -> Last Id: {ohlcData.LastPollingId}");
 
