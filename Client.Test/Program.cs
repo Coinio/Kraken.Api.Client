@@ -26,7 +26,7 @@ namespace Client.Test
 
             foreach (var ticker in tickers)
                 Console.WriteLine($"{ticker.PairName} -> Ask: {ticker.AskPrice} Bid: {ticker.BidPrice} Last: {ticker.LastPrice}");
-
+            
 
             var ohlcData = client.GetOHLC("XETHZUSD", OHLCTimeInterval.FiveMinutes).Result;
 

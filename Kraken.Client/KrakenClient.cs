@@ -14,12 +14,16 @@ namespace Kraken.Client
     public class KrakenClient
     {
         private HttpClient _httpClient;
-        private String _krakenApiVersion = "0";            
+
+        private String _krakenApiVersion = "0";
+        private String _publicBaseUrl = String.Empty;
 
         public KrakenClient(String baseAddress)
         {
             _httpClient = new HttpClient();                     
-            _httpClient.BaseAddress = new Uri($"{baseAddress}");          
+            _httpClient.BaseAddress = new Uri($"{baseAddress}");
+
+            _publicBaseUrl = $"/{_krakenApiVersion}/public/";
         }
 
         /// <summary>
@@ -28,13 +32,11 @@ namespace Kraken.Client
         /// <returns></returns>
         public async Task<KrakenAsset[]> GetAssetInfo()
         {
-            var url = $"/{_krakenApiVersion}/public/Assets";
+            var url = $"{_publicBaseUrl}/Assets";
 
-            var response = await _httpClient.GetStringAsync(url);
+            var resultJson = await GetAsync(url);
 
-            var assets = JsonConvert.DeserializeObject<KrakenAsset[]>(response, new KrakenGetAssetsJsonConverter());
-
-            return assets;
+            return JsonConvert.DeserializeObject<KrakenAsset[]>(resultJson, new KrakenGetAssetsJsonConverter());
         }
 
         /// <summary>
@@ -43,13 +45,11 @@ namespace Kraken.Client
         /// <returns></returns>
         public async Task<KrakenAssetPair[]> GetAssetPairs()
         {
-            var url = $"/{_krakenApiVersion}/public/AssetPairs";
+            var url = $"{_publicBaseUrl}/AssetPairs";
 
-            var response = await _httpClient.GetStringAsync(url);
+            var resultJson = await GetAsync(url);
 
-            var assetPairs = JsonConvert.DeserializeObject<KrakenAssetPair[]>(response, new KrakenGetAssetPairsJsonConverter());
-
-            return assetPairs;
+            return JsonConvert.DeserializeObject<KrakenAssetPair[]>(resultJson, new KrakenGetAssetPairsJsonConverter());
         }
 
         /// <summary>
@@ -73,12 +73,11 @@ namespace Kraken.Client
         {
             var parameters = BuildParameterArray("pair", pairNames);
 
-            var url = $"/{_krakenApiVersion}/public/Ticker?{parameters}";
-            var response = await _httpClient.GetStringAsync(url);
+            var url = $"{_publicBaseUrl}/Ticker?{parameters}";
 
-            var tickers = JsonConvert.DeserializeObject<KrakenAssetPairTicker[]>(response, new KrakenGetTickerJsonConverter());
+            var resultJson = await GetAsync(url);
 
-            return tickers;
+            return JsonConvert.DeserializeObject<KrakenAssetPairTicker[]>(resultJson, new KrakenGetTickerJsonConverter());
         }
 
         /// <summary>
@@ -94,13 +93,19 @@ namespace Kraken.Client
             var intervalParam = BuildParameter("interval", (int)interval);
             var lastPollingIdParam = BuildParameter("since", lastPollingId);
 
-            var url = $"/{_krakenApiVersion}/public/OHLC?{pairParams}&{intervalParam}&{lastPollingIdParam}";
+            var url = $"{_publicBaseUrl}/OHLC?{pairParams}&{intervalParam}&{lastPollingIdParam}";
 
-            var response = await _httpClient.GetStringAsync(url);
+            string resultJson = await GetAsync(url);
 
-            var ohlcData = JsonConvert.DeserializeObject<KrakenOHLCData>(response, new KrakenGetOHLCJsonConverter());
+            return JsonConvert.DeserializeObject<KrakenOHLCData>(resultJson, new KrakenGetOHLCJsonConverter());
+        }
+        
+        private async Task<string> GetAsync(string url)
+        {
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-            return ohlcData;
+            return await response.Content.ReadAsStringAsync();       
         }
 
         private String BuildParameter(String parameterName, object obj)
